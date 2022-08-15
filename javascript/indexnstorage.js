@@ -1,105 +1,105 @@
 // set de rules para nextRounds estara lleno previamente en otro programa
 // a partir de la posicion 1 el contenido es el proximo juego para los games de la segunda ronda me falta agregar los de las semifinales 
 const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14]
-const rules = [
-  {
-    game1: 1,
-    game2: 2,
-    gameNextRound:"9" // buscar el id en games
-  },
-  {
-    game1: '3',
-    game2: '4',
-    gameNextRound:"10"
-  },
-  {
-    game1: '5',
-    game2: '6',
-    gameNextRound:"11" // buscar el id en games
-  },
-  {
-    game1: '7',
-    game2: '8',
-    gameNextRound:"12"
-  },
-]
-// generar rulesNextRound en localStorage
-localStorage.setItem('rulesNextRound',JSON.stringify(rules))
-const rulesNextRound = JSON.parse(localStorage.getItem('rulesNextRound'))
-// realizar set inicial de las  reglas de next round este array de objetos ya debera estar generado en otro programa en el futuro
 
-const games = [
+// realizar set inicial de las  reglas de next round este array de objetos ya debera estar generado en otro programa en el futuro
+/*
+async function getGames(){
+ const getGames = await fetch('../proyecto_javascript/json/games.json')
+ const json = await getGames.json();
+  console.log("------------------")
+  console.log(json);
+  console.log("------------------")
+}
+*/
+
+async function getGames(){
+const getGames = await fetch('../proyecto_final/json/games.json', {
+  'mode': 'no-cors',
+  'headers': {
+      'Access-Control-Allow-Origin': '*',
+  }
+});
+//const json = await getGames.json() // aqui dice error 
+  console.log("------------------")
+  console.log(getGames.json);
+  console.log("------------------")
+}
+
+
+/*
+function getGames() {
+  let ruta = '../proyecto_final/json/games.json';
+  fetch(ruta)
+  .then( response=>response.json())
+  .then(json=>console.log(json))
+}
+*/
+getGames()
+
+
+
+
+let games = [
 {
   id: '1',
   nameP1: 'Raul Ramirez',
   nameP2: 'Vitas Gerulaitis',
-  winner :''
 },
 {
   id: '2',
   nameP1: 'Jimmy Connors',
   nameP2: 'Adriano Panatta',
-  winner :''
 },
 {
   id: '3',
   nameP1: 'Jose L, Clerc',
   nameP2: 'Ivan Lendl',
-  winner :''
 },
 {
   id: '4',
   nameP1: 'Rosco Tanner',
   nameP2: 'Ile Nastase',
-  winner :''
 },
 {
 id: '5',
 nameP1: 'Manuel Orantes',
 nameP2: 'Brian Gottfried',
-winner :'',
 },
 {
 id: '6',
 nameP1: 'Harold Solomon',
 nameP2: 'Jhon Mcnroee',
-winner :'',
-    },
+},
 {
  id: '7',
 nameP1: 'Stefan Edberg',
 nameP2: 'Mats Wilander',
-winner :'',
 },
 {
  id: '8',
  nameP1: 'Eduardo Velez',
  nameP2: 'Andre Agassi',
- winner :'',
 },
 {
   id: '9',
   nameP1: '',
   nameP2: '',
-  winner :'',
   },
   {
   id: '10',
   nameP1: '',
   nameP2: '',
-  winner :'',
       },
   {
    id: '11',
   nameP1: '',
   nameP2: '',
-  winner :'',
   },
   {
    id: '12',
    nameP1: '',
    nameP2: '',
-   winner :'',
   },
 ]
 // generar firstRound en localStorage
@@ -129,6 +129,7 @@ items.forEach((item) => {
   `;
   i=i+2;
 });
+// fin generar first rorund
 
 const botonSubmit = document.getElementById("botonSubmit");
 botonSubmit.addEventListener('click',(e)=> {
@@ -160,12 +161,12 @@ botonSubmit.addEventListener('click',(e)=> {
 
 
   // Toastify
-     Toastify({
-      text:`el ganador fue ${winner}`,
-      duration:2500,
-      position:'right',
-      style:{
-        backgrund: 'rgb(0, 255, 255)',
+  Toastify({
+    text:`el ganador fue ${winner}`,
+    duration:2500,
+    position:'right',
+    style:{
+      backgrund: 'rgb(0, 255, 255)',
         color: 'black',
         width :'175px',
         height:'75px',
@@ -173,16 +174,15 @@ botonSubmit.addEventListener('click',(e)=> {
      offset:{
       x:'60%',
       y:'100',
-
-     }
-     }).showToast();
-       // finToastify
-  score1=0;
-  score2=0;
-  score3=0;
-  score4=0;
-  score5=0;
-  score6=0;
+      }
+  }).showToast();
+  // finToastify
+score1=0;
+score2=0;
+score3=0;
+score4=0;
+score5=0;
+score6=0;
   
 
   // si P1 o P2 ya tienen info y lo que viene es vacio dejar lo que tiene no sobreescribir
@@ -192,18 +192,57 @@ botonSubmit.addEventListener('click',(e)=> {
   //posicionInicial= JSON.parse(JSON.stringify(x.innerHTML)).indexOf('"P17">')  
   //posicionFinal  = JSON.parse(JSON.stringify(x.innerHTML)).indexOf("</p>")  
   //strinner=JSON.parse(JSON.stringify(x.innerHTML)).substring(posicionInicial,posicionInicial-posicionFinal)
+
+  // ------(ir a storage a guardar score y winner y recuperarlo para mostrarlo aqui)----- 
+  //localStorage.setItem('gamesFirstRound',JSON.stringify(games))
+  //const items = JSON.parse(localStorage.getItem('gamesFirstRound'))
   
+  let actualGame = JSON.parse(localStorage.getItem('gamesFirstRound'))
+  actualGame = [JSON.stringify(actualGame[id-1])]
+  actualGame['winner'] = winner
+  updateStorage(actualGame,id-1)
+  // ----------------------actualiza winner ---------------------------- 
+
+
+ pos1 = (id-2) <= 0 ? 0 :id-2
+ pos2 = (id-1) ==0 ? 1 :id-1
+switch (id) {
+  case "1" || "2":
+    pos1 = 0
+    pos2 = 1
+    break
+    case "3" || "4": 
+    pos1 = 2
+    pos2 = 3
+    break;
+    case  "5" || "6": 
+      pos1 = 4
+      pos2 = 5
+      break
+    case "7" || "8": 
+        pos1 = 6
+        pos2 = 7
+        break
+  default:
+    break;
+}
+
+//<p id=P17> ${winner1} </p>
+// ojo con valor de pelos al hcer update
+// ojo pelos+''
   x.innerHTML = `
-        <button type="button" class="btn btn-primary showBtn" id="${pelos}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <p id=P17> ${winner1} </p>
+        <button type="button" class="btn btn-primary showBtn" id="${pelos+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <p id=P17> ${games[pos1].winner} </p>
         <p>vs</p>
-        <p id=P18> ${winner2} </p>
+        <p id=P18> ${games[pos2].winner} </p>
         <p> score</p>
         </button>
       </div>
   `;
 
   // localStorage
+ // console.log("pelos "+pelos)
+ // console.log(actualGame)
 })
 // aqui ya no vuelve a entrar despues de insertar el boton con el winner
 const showButtons = document.getElementsByClassName('showBtn');
@@ -307,3 +346,10 @@ for (const btn of showButtons) {
   });
 }
 
+function updateStorage(a,b){
+  //pos = ((b==0) ? b+9:b+8)
+  //alert(a)
+  games[b] = a
+  console.log(games[b])
+  localStorage.setItem('gamesSecondRound',JSON.stringify(games))
+}
