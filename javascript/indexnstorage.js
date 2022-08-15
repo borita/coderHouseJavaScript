@@ -12,7 +12,7 @@ async function getGames(){
   console.log("------------------")
 }
 */
-
+/*
 async function getGames(){
 const getGames = await fetch('../proyecto_final/json/games.json', {
   'mode': 'no-cors',
@@ -26,15 +26,22 @@ const getGames = await fetch('../proyecto_final/json/games.json', {
   console.log("------------------")
 }
 
-
-/*
+*/
 function getGames() {
-  let ruta = '../proyecto_final/json/games.json';
-  fetch(ruta)
+  
+  let ruta = '../proyecto_final/json/games.json'
+  fetch(ruta, {
+    'mode': 'no-cors',
+    'headers': {
+        'Access-Control-Allow-Origin': '*',
+    }
+  })
   .then( response=>response.json())
   .then(json=>console.log(json))
 }
-*/
+
+
+
 getGames()
 
 
