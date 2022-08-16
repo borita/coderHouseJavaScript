@@ -12,21 +12,32 @@ async function getGames(){
   console.log("------------------")
 }
 */
+ url = "../proyecto_final/json/games.json"
+  function getGames(){
+    fetch(url, {
+      'mode': 'no-cors',
+      'headers': {
+          'Access-Control-Allow-Origin': '*',
+          }
+    })
+    .then(res => res.json())
+    .then(games => {
+    console.log(games);
+  })
+
+}
 /*
-async function getGames(){
-const getGames = await fetch('../proyecto_final/json/games.json', {
-  'mode': 'no-cors',
-  'headers': {
-      'Access-Control-Allow-Origin': '*',
-  }
-});
 //const json = await getGames.json() // aqui dice error 
   console.log("------------------")
   console.log(getGames.json);
   console.log("------------------")
 }
-
 */
+
+
+
+
+/*
 function getGames() {
   
   let ruta = '../proyecto_final/json/games.json'
@@ -39,6 +50,7 @@ function getGames() {
   .then( response=>response.json())
   .then(json=>console.log(json))
 }
+*/
 
 
 
