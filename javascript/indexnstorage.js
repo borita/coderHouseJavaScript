@@ -1,3 +1,42 @@
+window.addEventListener('load', ()=> {
+  let lon
+  let lat
+
+  if(navigator.geolocation){
+     navigator.geolocation.getCurrentPosition( posicion => {
+         //console.log(posicion.coords.latitude)
+         lon = posicion.coords.longitude
+         lat = posicion.coords.latitude
+          //ubicación actual    
+         //ubicación por ciudad
+         const url = `https://api.openweathermap.org/data/2.5/weather?q=McAllen&lang=es&units=metric&appid=65a23d022f59b3e4ba06e87387a95f1a`
+
+         //console.log(url)
+
+         fetch(url)
+          .then( response => { return response.json()})
+          .then( data => {
+              console.log(data)
+              city = data.name
+              country = data.sys.country
+              let temp = Math.round(data.main.temp)
+              let tmax = Math.round(data.main.temp_max)
+              let tmin = Math.round(data.main.temp)
+              console.log("Ciudad :"+city)
+              console.log("Pais :"+country)
+              console.log("Temperatura Actual :"+temp)
+              console.log("Temperatura Minima :"+tmin)
+              console.log("Temperatura Maxima :"+tmax)
+          })
+          .catch( error => {
+              console.log(error)
+          })
+     })
+        
+  }
+})
+
+
 // set de rules para nextRounds estara lleno previamente en otro programa
 // a partir de la posicion 1 el contenido es el proximo juego para los games de la segunda ronda me falta agregar los de las semifinales 
 const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14]
@@ -12,31 +51,40 @@ async function getGames(){
   console.log("------------------")
 }
 */
- url = "../proyecto_final/json/games.json"
-  function getGames(){
-    fetch(url, {
-      'mode': 'no-cors',
-      'headers': {
-          'Access-Control-Allow-Origin': '*',
-          }
-    })
-    .then(res => res.json())
-    .then(games => {
-    console.log(games);
+/*
+ let url = 'games.json'
+ function getGames(){
+  fetch(url, {
+   'mode': 'no-cors',
+   'headers': {
+       'Access-Control-Allow-Origin': '*',
+   }
+  }).then(function(res){
+    return res.json();
   })
 
 }
-/*
-//const json = await getGames.json() // aqui dice error 
-  console.log("------------------")
-  console.log(getGames.json);
-  console.log("------------------")
+*/
+
+/***************** este es la ultima version */
+ //let url='../proyecto_javascript/json/games.json'
+ /*
+ let url = 'games.json'
+ function getGames(){
+ fetch(url, {
+  'mode': 'no-cors',
+  'headers': {
+      'Access-Control-Allow-Origin': '*',
+  }
+ })
+.then(res =>  res.json())
+.then(games => {
+  console.log(games);
+})
 }
 */
 
-
-
-
+/*************************** */
 /*
 function getGames() {
   
@@ -50,15 +98,16 @@ function getGames() {
   .then( response=>response.json())
   .then(json=>console.log(json))
 }
+
 */
 
 
+//getGames()
 
-getGames()
+// api clima Your API key is 65a23d022f59b3e4ba06e87387a95f1a
 
 
-
-
+//------------------------------------------------------------
 let games = [
 {
   id: '1',
