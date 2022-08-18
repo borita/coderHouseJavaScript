@@ -1,7 +1,6 @@
 window.addEventListener('load', ()=> {
   let lon
   let lat
-
   if(navigator.geolocation){
      navigator.geolocation.getCurrentPosition( posicion => {
          //console.log(posicion.coords.latitude)
@@ -20,21 +19,27 @@ window.addEventListener('load', ()=> {
               city = data.name
               country = data.sys.country
               let temp = Math.round(data.main.temp)
+              let tmin = Math.round(data.main.temp_min)
               let tmax = Math.round(data.main.temp_max)
-              let tmin = Math.round(data.main.temp)
               console.log("Ciudad :"+city)
               console.log("Pais :"+country)
               console.log("Temperatura Actual :"+temp)
               console.log("Temperatura Minima :"+tmin)
               console.log("Temperatura Maxima :"+tmax)
+              clima=document.getElementById('clima');
+              clima=document.getElementById('clima');
+              clima.innerHTML = `<p> Temperatura Actual : ${temp}</p>
+              <p> Temperatura Minima : ${tmin}</p>
+              <p> Temperatura Maxima : ${tmax}</p>`
           })
           .catch( error => {
               console.log(error)
           })
-     })
-        
+     })   
   }
-})
+}
+
+)
 
 
 // set de rules para nextRounds estara lleno previamente en otro programa
