@@ -27,7 +27,6 @@ window.addEventListener('load', ()=> {
               console.log("Temperatura Minima :"+tmin)
               console.log("Temperatura Maxima :"+tmax)
               clima=document.getElementById('clima');
-              clima=document.getElementById('clima');
               clima.innerHTML = `<p> Temperatura Actual : ${temp}</p>
               <p> Temperatura Minima : ${tmin}</p>
               <p> Temperatura Maxima : ${tmax}</p>`
@@ -56,8 +55,9 @@ async function getGames(){
   console.log("------------------")
 }
 */
-/*
+
  let url = 'games.json'
+
  function getGames(){
   fetch(url, {
    'mode': 'no-cors',
@@ -65,12 +65,31 @@ async function getGames(){
        'Access-Control-Allow-Origin': '*',
    }
   }).then(function(res){
+    console.log(res);
+    return res.json();
+  }).then(function(data){
+    console.log(data)
+  }).catch(function(error){
+    console.log(error);
+  })
+  }
+
+
+
+
+/* sin cors
+function getGames(){
+  fetch(url).then(function(res){
+    console.log(res);
     return res.json();
   })
 
 }
 */
-
+pelotes = getGames()
+console.log("--------------")
+console.log(pelotes)
+console.log("-------------------")
 /***************** este es la ultima version */
  //let url='../proyecto_javascript/json/games.json'
  /*
