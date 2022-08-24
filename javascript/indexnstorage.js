@@ -10,22 +10,14 @@ window.addEventListener('load', ()=> {
          //ubicación por ciudad
          const url = `https://api.openweathermap.org/data/2.5/weather?q=McAllen&lang=es&units=metric&appid=65a23d022f59b3e4ba06e87387a95f1a`
 
-         //console.log(url)
-
          fetch(url)
           .then( response => { return response.json()})
           .then( data => {
-              console.log(data)
               city = data.name
               country = data.sys.country
               let temp = Math.round(data.main.temp)
               let tmin = Math.round(data.main.temp_min)
               let tmax = Math.round(data.main.temp_max)
-              console.log("Ciudad :"+city)
-              console.log("Pais :"+country)
-              console.log("Temperatura Actual :"+temp)
-              console.log("Temperatura Minima :"+tmin)
-              console.log("Temperatura Maxima :"+tmax)
               clima=document.getElementById('clima');
               clima.innerHTML = `<p> Temperatura Actual : ${temp}</p>
               <p> Temperatura Minima : ${tmin}</p>
@@ -43,21 +35,12 @@ window.addEventListener('load', ()=> {
 
 // set de rules para nextRounds estara lleno previamente en otro programa
 // a partir de la posicion 1 el contenido es el proximo juego para los games de la segunda ronda me falta agregar los de las semifinales 
-const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14]
+const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19]
 
 // realizar set inicial de las  reglas de next round este array de objetos ya debera estar generado en otro programa en el futuro
-/*
-async function getGames(){
- const getGames = await fetch('../proyecto_javascript/json/games.json')
- const json = await getGames.json();
-  console.log("------------------")
-  console.log(json);
-  console.log("------------------")
-}
-*/
 
- let url = 'games.json'
-
+ let url = 'json/games.json'
+ nextGame=[]
  function getGames(){
   fetch(url, {
    'mode': 'no-cors',
@@ -74,7 +57,7 @@ async function getGames(){
   })
   }
 
-
+ //getGames()
 
 
 /* sin cors
@@ -86,48 +69,6 @@ function getGames(){
 
 }
 */
-pelotes = getGames()
-console.log("--------------")
-console.log(pelotes)
-console.log("-------------------")
-/***************** este es la ultima version */
- //let url='../proyecto_javascript/json/games.json'
- /*
- let url = 'games.json'
- function getGames(){
- fetch(url, {
-  'mode': 'no-cors',
-  'headers': {
-      'Access-Control-Allow-Origin': '*',
-  }
- })
-.then(res =>  res.json())
-.then(games => {
-  console.log(games);
-})
-}
-*/
-
-/*************************** */
-/*
-function getGames() {
-  
-  let ruta = '../proyecto_final/json/games.json'
-  fetch(ruta, {
-    'mode': 'no-cors',
-    'headers': {
-        'Access-Control-Allow-Origin': '*',
-    }
-  })
-  .then( response=>response.json())
-  .then(json=>console.log(json))
-}
-
-*/
-
-
-//getGames()
-
 // api clima Your API key is 65a23d022f59b3e4ba06e87387a95f1a
 
 
@@ -175,28 +116,44 @@ nameP2: 'Mats Wilander',
 },
 {
   id: '9',
-  nameP1: '',
-  nameP2: '',
+  nameP1: 'Raul Ramirez',
+  nameP2: 'Jimmy Connors',
   },
   {
   id: '10',
-  nameP1: '',
-  nameP2: '',
+  nameP1: 'Ivan Lendl',
+  nameP2: 'Ile Nastase',
       },
   {
    id: '11',
-  nameP1: '',
-  nameP2: '',
+  nameP1: 'Manuel Orantes',
+  nameP2: 'John Mcnroee',
   },
   {
    id: '12',
-   nameP1: '',
-   nameP2: '',
+   nameP1: 'Mats Wilander',
+   nameP2: 'Eduardo Velez',
   },
+  {
+   id: '13',
+   nameP1: 'Raul Ramirez',
+   nameP2: 'Ile Nastase',
+  },
+  {
+   id: '14',
+   nameP1: 'Manuel Orantes',
+   nameP2: 'Eduardo Velez',
+  },
+  {
+   id: '15',
+   nameP1: 'PendingK',
+   nameP2: 'PendingL',
+  }
 ]
 // generar firstRound en localStorage
 localStorage.setItem('gamesFirstRound',JSON.stringify(games))
 const items = JSON.parse(localStorage.getItem('gamesFirstRound'))
+//const items = JSON.parse(localStorage.getItem('gamesSecondRound'))
 
 function buscarNextRound(g,w) {
   return reglas[g];
@@ -249,9 +206,6 @@ botonSubmit.addEventListener('click',(e)=> {
   else{
     winner1=winner
   }
-
-
-
   // Toastify
   Toastify({
     text:`el ganador fue ${winner}`,
@@ -292,6 +246,7 @@ score6=0;
   let actualGame = JSON.parse(localStorage.getItem('gamesFirstRound'))
   actualGame = [JSON.stringify(actualGame[id-1])]
   actualGame['winner'] = winner
+ 
   updateStorage(actualGame,id-1)
   // ----------------------actualiza winner ---------------------------- 
 
@@ -315,31 +270,113 @@ switch (id) {
         pos1 = 6
         pos2 = 7
         break
+    case "9" || "10": 
+        pos1 = 8
+        pos2 = 9
+        break    
+        case "11" || "12": 
+        pos1 = 10
+        pos2 = 11
+        break     
+    case "13" || "14":
+        pos1 = 12
+        pos2 = 13
+        break            
+    case "15" || "16": 
+        pos1 = 14
+        pos2 = 15
+        break                 
+        case "17" || "18":
+        pos1 = 16
+        pos2 = 17
+        break                     
   default:
     break;
 }
-
-//<p id=P17> ${winner1} </p>
-// ojo con valor de pelos al hcer update
-// ojo pelos+''
+p1= games[pos1].winner
+p2= games[pos2].winner
+nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
+console.log(" NEXT GAME :"+nextGame[pelos])
   x.innerHTML = `
         <button type="button" class="btn btn-primary showBtn" id="${pelos+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <p id=P17> ${games[pos1].winner} </p>
+        <p id=P${(((pelos*2)-1)+'')}> ${games[pos1].winner} </p>
         <p>vs</p>
-        <p id=P18> ${games[pos2].winner} </p>
+        <p id=P${((pelos*2)+'')}> ${games[pos2].winner} </p>
+        <p> score</p>
+        </button>
+      </div>`;
+/*
+      //----------------------------- listener para updated
+let i = 1
+items.forEach((item) => {
+  appDiv.innerHTML += `
+      <div class="item${item.id}">
+        <button type="button" class="btn btn-primary showBtn" id="${item.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <p id=P${(i+'')}> ${item.nameP1} </p>
+        <p>vs</p>
+        <p id=P${((i+1)+'')}> ${item.nameP2} </p>
         <p> score</p>
         </button>
       </div>
   `;
-
-  // localStorage
- // console.log("pelos "+pelos)
- // console.log(actualGame)
+  i=i+2;
+});
+for (const btn of showButtons) { 
+      btn.addEventListener('click', (e) => {
+        alert("id del click ? "+ idGame)  
+        const foundItem = items.find((item) => item.id ===btn.id);
+        idGame=btn.id;
+        player1=foundItem.nameP1
+        player2=foundItem.nameP2
+        registroScore.innerHTML = `
+        <div class="idGame" ><label for="idGame">${btn.id}</label>
+        <br><br><br><br><br><br>
+        <input
+          type="number"
+          id="idGame"
+          name="idGame"
+          value="${btn.id}"
+          disabled
+          />
+          </div>
+          
+          <div>
+            <label for="score1">${foundItem.nameP1}</label>
+            <input
+              type="number"
+              id="score1"
+              name="score1"
+              min="0"
+              max="7"
+              step="1"
+              value="0"
+            />
+          </div>
+      
+          <div>
+            <label for="score2">${foundItem.nameP2}</label>
+            <input
+              type="number"
+              id="score2"
+              name="score2"
+              min="0"
+              max="7"
+              step="1"
+              value="0"
+            />
+          </div>`
+      })}
+      //----------------------------- fin de listener updated
+      updateStorage(nextGame,pelos)
+      */
+  console.log("que genero")
+  console.log(x)
 })
 // aqui ya no vuelve a entrar despues de insertar el boton con el winner
 const showButtons = document.getElementsByClassName('showBtn');
 for (const btn of showButtons) {
   btn.addEventListener('click', (e) => {
+  alert("id del click ? "+ btn.id)  
   const foundItem = items.find((item) => item.id === btn.id);
   idGame=btn.id;
   player1=foundItem.nameP1
@@ -438,10 +475,15 @@ for (const btn of showButtons) {
   });
 }
 
+// args son arreglo donde di click y el id con este puedo ir a reglas a traer el nextMatch
 function updateStorage(a,b){
-  //pos = ((b==0) ? b+9:b+8)
-  //alert(a)
-  games[b] = a
-  console.log(games[b])
-  localStorage.setItem('gamesSecondRound',JSON.stringify(games))
+  games[b] = a // si quito esto falla lo de actualizar player en siguiente ronda
+  //alert(games)
+  //7 , 4 ,2
+  /*
+ games[b]["id"] = a[0]
+ games[b]["nameP1"] = a[1]
+ games[b]["nameP2"] = a[2]
+ localStorage.setItem('gamesFirstRound',JSON.stringify(games[b]))
+ */
 }

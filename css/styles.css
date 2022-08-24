@@ -131,12 +131,17 @@ body{
     width: 140px;
    height: 150px
    }
-
+   #campeon{
+    grid-column: 4;
+    grid-row: 7;
+    width: 140px;
+   height: 150px
+   }
    .weather{
     padding:20px;
-    margin-left: 215px;
+    margin-left: 265px;
     height: 20px;
-    width: 90%;
+    width: 75%;
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
