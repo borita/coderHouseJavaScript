@@ -157,13 +157,6 @@ return items
 items =getGamesFromStoorage()
 
 function buscarNextRound(g,w) {
-  /*
-  if (reglas[g] =="campeon"){
-      campeon = document.getElementsByClassName("campeon")
-      campeon.innerHTML = `<p> CAMPEON </p>
-      <p> ${"RaulRamirez"} </p>`
-  }
-  */
   return reglas[g];
 }  
 let player1 ='';
@@ -193,7 +186,7 @@ botonSubmit.addEventListener('click',(e)=> {
   winner2 = ''
   winner = ((parseInt(score1)+parseInt(score3)+parseInt(score5)) > (parseInt(score2)+parseInt(score4)+parseInt(score6)) ? player1:player2)
   // buscar en rules reglas que match les tocara en la siguiente ronda
-  pelos=buscarNextRound(id,winner)
+  nextRound=buscarNextRound(id,winner)
   // los pares (posicion en el arreglo de reglas ) siempre iran en la parte de abajo
   if(id %2 ==0 ){
     winner2=winner
@@ -225,18 +218,12 @@ score3=0;
 score4=0;
 score5=0;
 score6=0;
-////x=document.querySelector(".item"+((pelos)+''));
-////let actualGame = JSON.parse(localStorage.getItem('gamesFirstRound'))
-
-x=document.querySelector(".item"+((pelos)+''));
-
+x=document.querySelector(".item"+((nextRound)+''));
 const rounds = JSON.parse(localStorage.getItem("gamesFirstRound"));
 let actualGame = rounds[id - 1];
 actualGame['winner'] = winner
 updateStorageTemporal(actualGame,id-1) 
-  // ----------------------actualiza winner ---------------------------- 
-
-
+  // -----------(se determina la posicion del proximo juego en base a si fue par o no)
  pos1 = (id-2) <= 0 ? 0 :id-2
  pos2 = (id-1) ==0 ? 1 :id-1
 switch (id) {
@@ -282,20 +269,18 @@ switch (id) {
 
 p1= games[pos1].winner
 p2= games[pos2].winner
-nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
+nextGame[nextRound]={"id":nextRound+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
 if(id+''=='15'){
-  campeon = document.getElementsByClassName('item16'); //no quiso 
+  //campeon = document.getElementsByClassName('item16'); //no quiso 
   campeon=document.querySelector(".item"+(16+''));     // si quiso
-  campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
+  campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
 }
 else {
-  //campeon=document.querySelector(".item"+(16+''));
-  //      campeon.innerHTML = ``
   x.innerHTML = `
-        <button type="button" class="btn btn-primary showBtn"  id="${pelos+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <p id=P${(((pelos*2)-1)+'')}> ${games[pos1].winner} </p>
+        <button type="button" class="btn btn-primary showBtn"  id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <p id=P${(((nextRound*2)-1)+'')}> ${games[pos1].winner} </p>
         <p>vs</p>
-        <p id=P${((pelos*2)+'')}> ${games[pos2].winner} </p>
+        <p id=P${((nextRound*2)+'')}> ${games[pos2].winner} </p>
         <p> score</p>
         </button>
         `
@@ -303,21 +288,12 @@ else {
         campeon.innerHTML = `<h3> </h3>`
 }
   
-
-// aqui dejar como estaba antes de ir al storage temporal hay que actualizar el storage con actualGame que seria actualGamet
-//actualGame=actualGameT
- updateStorage(nextGame,pelos,id-1)
- // parche
- //updateStorageOriginal(actualGameT,id-1)
+ updateStorage(nextGame,nextRound,id-1)
 })
 
 function generaBotones(){
     items.forEach((item) => {
       if((i+'')=='31' || (i+'') =='32' ){
-        /*
-        elimino el boton hao un create element en la posicion y pongo al campeon
-        */
-      
         appDiv.innerHTML += `<div class="item${item.id}"> <p id=P${(i+'')}>  ${""}</p> </div>` // tenia pending
       }
       else {
@@ -444,37 +420,11 @@ function updateStorageOriginal(a,b){
   games[b] = a 
   localStorage.setItem('gamesFirstRound',JSON.stringify(games)) 
 }
-// no esta funcionando
 function updateStorage(a,b){
     games[b-1] = a[b]
     localStorage.setItem('gamesFirstRound',JSON.stringify(games)) 
-    items = JSON.parse(localStorage.getItem('gamesFirstRound')) //solo quite const y jalo sere el pedo de la inmutabilidad ?
+    items = JSON.parse(localStorage.getItem('gamesFirstRound')) //solo quite const y jalo sera la inmutabilidad ?
    //generaBotones()
    generaListeners()
   
   }
-
-
-
-   // por si se neececita
-   //x=document.querySelector(".item9");
-  //posicionInicial= JSON.parse(JSON.stringify(x.innerHTML)).indexOf('"P17">')  
-  //posicionFinal  = JSON.parse(JSON.stringify(x.innerHTML)).indexOf("</p>")  
-  //strinner=JSON.parse(JSON.stringify(x.innerHTML)).substring(posicionInicial,posicionInicial-posicionFinal)
-
-  // ------(ir a storage a guardar score y winner y recuperarlo para mostrarlo aqui)----- 
-  //localStorage.setItem('gamesFirstRound',JSON.stringify(games))
-  //const items = JSON.parse(localStorage.getItem('gamesFirstRound'))
-
-
-/*
-  x=document.querySelector(".item"+((pelos)+''));
-
-const rounds = JSON.parse(localStorage.getItem("gamesFirstRound"));
-let actualGame = rounds[id - 1];
-actualGame['winner'] = winner
-updateStorageTemporal(actualGame,id-1) 
-
-
-  // ----------------------actualiza winner ----------------------------
-*/
