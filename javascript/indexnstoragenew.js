@@ -140,7 +140,12 @@ function getGamesFromStoorage() {
         id: '15',
         nameP1: 'PendingK',
         nameP2: 'PendingL',
-    }
+    },
+    {
+      id: '16',
+      nameP1: '',
+      nameP2: '',
+  }
 ]
 
 // generar firstRound en localStorage
@@ -152,14 +157,13 @@ return items
 items =getGamesFromStoorage()
 
 function buscarNextRound(g,w) {
+  /*
   if (reglas[g] =="campeon"){
-      alert ("tenemos campeon")
-      campeon = document.getElementById("campeon")
+      campeon = document.getElementsByClassName("campeon")
       campeon.innerHTML = `<p> CAMPEON </p>
       <p> ${"RaulRamirez"} </p>`
-
-      return
   }
+  */
   return reglas[g];
 }  
 let player1 ='';
@@ -221,16 +225,15 @@ score3=0;
 score4=0;
 score5=0;
 score6=0;
+////x=document.querySelector(".item"+((pelos)+''));
+////let actualGame = JSON.parse(localStorage.getItem('gamesFirstRound'))
+
 x=document.querySelector(".item"+((pelos)+''));
-let actualGame = JSON.parse(localStorage.getItem('gamesFirstRound'))
-//let actualGameT = JSON.stringify(actualGame[id-1])
-actualGame = [JSON.stringify(actualGame[id-1])]
+
+const rounds = JSON.parse(localStorage.getItem("gamesFirstRound"));
+let actualGame = rounds[id - 1];
 actualGame['winner'] = winner
-//actualGame = JSON.stringify(actualGame[id-1])
-//actualGame.winner = winner
 updateStorageTemporal(actualGame,id-1) 
-
-
   // ----------------------actualiza winner ---------------------------- 
 
 
@@ -280,18 +283,25 @@ switch (id) {
 p1= games[pos1].winner
 p2= games[pos2].winner
 nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
-
-
-nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
-nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].winner}
+if(id+''=='15'){
+  campeon = document.getElementsByClassName('item16'); //no quiso 
+  campeon=document.querySelector(".item"+(16+''));     // si quiso
+  campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
+}
+else {
+  //campeon=document.querySelector(".item"+(16+''));
+  //      campeon.innerHTML = ``
   x.innerHTML = `
-        <button type="button" class="btn btn-primary showBtn" id="${pelos+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary showBtn"  id="${pelos+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${(((pelos*2)-1)+'')}> ${games[pos1].winner} </p>
         <p>vs</p>
         <p id=P${((pelos*2)+'')}> ${games[pos2].winner} </p>
         <p> score</p>
         </button>
-      </div>`;
+        `
+        campeon=document.querySelector(".item"+(16+''));
+        campeon.innerHTML = `<h3> </h3>`
+}
   
 
 // aqui dejar como estaba antes de ir al storage temporal hay que actualizar el storage con actualGame que seria actualGamet
@@ -303,6 +313,14 @@ nextGame[pelos]={"id":pelos+'',"nameP1":games[pos1].winner,"nameP2":games[pos2].
 
 function generaBotones(){
     items.forEach((item) => {
+      if((i+'')=='31' || (i+'') =='32' ){
+        /*
+        elimino el boton hao un create element en la posicion y pongo al campeon
+        */
+      
+        appDiv.innerHTML += `<div class="item${item.id}"> <p id=P${(i+'')}>  ${""}</p> </div>` // tenia pending
+      }
+      else {
         appDiv.innerHTML += `
             <div class="item${item.id}">
               <button type="button" class="btn btn-primary showBtn" id="${item.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -313,12 +331,12 @@ function generaBotones(){
               </button>
             </div>`;
         i=i+2;
-      });
+      }});
+    
 }
 function generaListeners(){
     for (const btn of showButtons) {
         btn.addEventListener('click', (e) => {
-        //alert("id del click ? "+ btn.id)  
         const foundItem = items.find((item) => item.id === btn.id);
         idGame=btn.id;
         player1=foundItem.nameP1
@@ -447,3 +465,16 @@ function updateStorage(a,b){
   // ------(ir a storage a guardar score y winner y recuperarlo para mostrarlo aqui)----- 
   //localStorage.setItem('gamesFirstRound',JSON.stringify(games))
   //const items = JSON.parse(localStorage.getItem('gamesFirstRound'))
+
+
+/*
+  x=document.querySelector(".item"+((pelos)+''));
+
+const rounds = JSON.parse(localStorage.getItem("gamesFirstRound"));
+let actualGame = rounds[id - 1];
+actualGame['winner'] = winner
+updateStorageTemporal(actualGame,id-1) 
+
+
+  // ----------------------actualiza winner ----------------------------
+*/

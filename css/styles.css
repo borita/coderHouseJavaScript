@@ -131,11 +131,12 @@ body{
     width: 140px;
    height: 150px
    }
-   #campeon{
+   .item16{
     grid-column: 4;
-    grid-row: 7;
+    grid-row: 6;
     width: 140px;
-   height: 150px
+    height: 150px;
+    color:blue
    }
    .weather{
     padding:20px;
