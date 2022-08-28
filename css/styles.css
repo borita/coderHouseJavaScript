@@ -16,6 +16,9 @@ body{
     row-gap: 1px;
     background-color: rgb(227, 235, 213);
 }
+.main{
+  margin-left: 850px;
+}
   .item{
     width: 200px;
     height: 150px;

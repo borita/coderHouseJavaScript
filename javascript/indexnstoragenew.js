@@ -78,7 +78,7 @@ function getGamesFromStoorage() {
     },
     {
         id: '3',
-        nameP1: 'Jose L, Clerc',
+        nameP1: 'Gillermo Vilas',
         nameP2: 'Ivan Lendl',
     },
     {
@@ -138,8 +138,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '15',
-        nameP1: 'PendingK',
-        nameP2: 'PendingL',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
     },
     {
       id: '16',
@@ -212,18 +212,30 @@ botonSubmit.addEventListener('click',(e)=> {
       }
   }).showToast();
   // finToastify
+ /* 
 score1=0;
 score2=0;
 score3=0;
 score4=0;
 score5=0;
 score6=0;
+*/
 x=document.querySelector(".item"+((nextRound)+''));
 const rounds = JSON.parse(localStorage.getItem("gamesFirstRound"));
 let actualGame = rounds[id - 1];
+// score ganador 
 actualGame['winner'] = winner
-updateStorageTemporal(actualGame,id-1) 
-  // -----------(se determina la posicion del proximo juego en base a si fue par o no)
+actualGame['score1'] = score1
+actualGame['score3'] = score3
+actualGame['score5'] = score5
+// score perdedor
+actualGame['winner'] = winner
+actualGame['score2'] = score2
+actualGame['score4'] = score4
+actualGame['score6'] = score6
+// aqui puedo actualizar score tendre el score del ganador o perdedor con el del perdedor podre deducuir el del ganador
+updateStorageTemporal(actualGame,id-1,x) 
+  // -----------(se determina la posicion del proximo juego en base a si fue par o non)
  pos1 = (id-2) <= 0 ? 0 :id-2
  pos2 = (id-1) ==0 ? 1 :id-1
 switch (id) {
@@ -274,18 +286,40 @@ if(id+''=='15'){
   //campeon = document.getElementsByClassName('item16'); //no quiso 
   campeon=document.querySelector(".item"+(16+''));     // si quiso
   campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
+  final=document.querySelector(".item"+(15+''));     
+  final.innerHTML = `
+        <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <p id=P${((id*2)-1+'')}> ${games[id-1].nameP1} </p>
+        <p>vs</p>
+        <p id=P${(id*2+'')}> ${games[id-1].nameP2} </p>
+        <p> ${games[id-1].score1+ '-'+games[id-1].score2+'  '+games[id-1].score3+ '-'+games[id-1].score4+'  '+games[id-1].score5+ '-'+games[id-1].score6} </p>
+        </button>
+        `
 }
 else {
   x.innerHTML = `
         <button type="button" class="btn btn-primary showBtn"  id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <p id=P${(((nextRound*2)-1)+'')}> ${games[pos1].winner} </p>
+        <p id=P${(((nextRound*2)-1)+'')}> ${games[pos1].winner ===undefined ? "Pending":games[pos1].winner} </p>
         <p>vs</p>
-        <p id=P${((nextRound*2)+'')}> ${games[pos2].winner} </p>
-        <p> score</p>
+        <p id=P${((nextRound*2)+'')}> ${games[pos2].winner===undefined ? "Pending":games[pos2].winner}  </p>
+        <p> score </p>
         </button>
         `
         campeon=document.querySelector(".item"+(16+''));
         campeon.innerHTML = `<h3> </h3>`
+        // aqui puedo actualizar el resultado del juego anterior
+        score=document.querySelector(".item"+((id)+''));
+        //score.innerHTML += `<p>${score1+' '+score2+' '+score3+' '+score4+' '+score5+' '+score6 }</p>`
+        score.innerHTML = `
+        <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <p id=P${((id*2)-1+'')}> ${games[id-1].nameP1} </p>
+        <p>vs</p>
+        <p id=P${(id*2+'')}> ${games[id-1].nameP2} </p>
+        <p> ${games[id-1].score1+ '-'+games[id-1].score2+'  '+games[id-1].score3+ '-'+games[id-1].score4+'  '+games[id-1].score5+ '-'+games[id-1].score6} </p>
+        </button>
+        `
+        
+        
 }
   
  updateStorage(nextGame,nextRound,id-1)
@@ -318,7 +352,7 @@ function generaListeners(){
         player1=foundItem.nameP1
         player2=foundItem.nameP2
         registroScore.innerHTML = `
-        <div class="idGame" ><label for="idGame">${btn.id}</label>
+        <div class="idGame" ><label for="idGame"></label>
         <br><br><br><br><br><br>
         <input
         type="number"
@@ -328,7 +362,6 @@ function generaListeners(){
        disabled
        />
       </div>
-      
       <div>
         <label for="score1">${foundItem.nameP1}</label>
         <input
@@ -412,19 +445,13 @@ function generaListeners(){
   }
 }
 // args son arreglo donde di click y el id con este puedo ir a reglas a traer el nextMatch
-function updateStorageTemporal(a,b){
-  games[b] = a // si quito esto falla lo de actualizar player en siguientematch
-}
-
-function updateStorageOriginal(a,b){
-  games[b] = a 
-  localStorage.setItem('gamesFirstRound',JSON.stringify(games)) 
+function updateStorageTemporal(a,b,x){
+  games[b] = a // actualizar player en siguientematch 
 }
 function updateStorage(a,b){
     games[b-1] = a[b]
     localStorage.setItem('gamesFirstRound',JSON.stringify(games)) 
     items = JSON.parse(localStorage.getItem('gamesFirstRound')) //solo quite const y jalo sera la inmutabilidad ?
-   //generaBotones()
    generaListeners()
   
   }
