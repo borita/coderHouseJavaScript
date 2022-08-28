@@ -37,7 +37,7 @@ window.addEventListener('load', ()=> {
 // a partir de la posicion 1 el contenido es el proximo juego para los games de la seguientes ronda 
 const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14,15,15,"campeon"]
 
-// cargar json 
+// cargar json se utilizo localStorage hare una proxima version usando JSON
 
  let url = 'json/games.json'
  nextGame=[]
@@ -61,6 +61,7 @@ const reglas =['',9,9,10,10,11,11,12,12,13,13,14,14,15,15,"campeon"]
 let games=[]
 let gameTemp=[]
 let items=[]
+// se obtiene el estatus inicial del storage en el futuro esto estara generandose en otro programa
 function getGamesFromStoorage() {
     
     games = [
@@ -153,9 +154,9 @@ localStorage.setItem('gamesFirstRound',JSON.stringify(games))
 const items = JSON.parse(localStorage.getItem('gamesFirstRound'))
 return items
 }
-
+// ir a storage por set up inicial
 items =getGamesFromStoorage()
-
+// se obtiene el proximo match del ganador del arreglo de reglas cada posicion indica cual es el proximo juego del winner
 function buscarNextRound(g,w) {
   return reglas[g];
 }  
@@ -233,7 +234,7 @@ actualGame['winner'] = winner
 actualGame['score2'] = score2
 actualGame['score4'] = score4
 actualGame['score6'] = score6
-// aqui puedo actualizar score tendre el score del ganador o perdedor con el del perdedor podre deducuir el del ganador
+// aqui puedo actualizar score tendre el score del ganador o perdedor con el del perdedor podre deducuir el del ganador (update pendiente funciono en otra parte)
 updateStorageTemporal(actualGame,id-1,x) 
   // -----------(se determina la posicion del proximo juego en base a si fue par o non)
  pos1 = (id-2) <= 0 ? 0 :id-2
@@ -286,7 +287,8 @@ if(id+''=='15'){
   //campeon = document.getElementsByClassName('item16'); //no quiso 
   campeon=document.querySelector(".item"+(16+''));     // si quiso
   campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
-  final=document.querySelector(".item"+(15+''));     
+  final=document.querySelector(".item"+(15+''));    
+  // validar no haya algun player pending poner alerta con Toastify si uno de los 2 es undefined or pending
   final.innerHTML = `
         <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${((id*2)-1+'')}> ${games[id-1].nameP1} </p>
@@ -297,8 +299,15 @@ if(id+''=='15'){
         `
 }
 else {
+  // validar no haya algun player pending poner alerta con Toastify si uno de los 2 es undefined or pending
+  // prender una flag y con eso saber si es disabled or enabled
+  let desabilitar = false
+  if(games[pos1].winner ===undefined || games[pos2].winner ===undefined || games[pos2].winner ==='' || games[pos1].winner ===''){
+    desabilitar = true
+  }
+  // no iba a terminar sin usar esto  ${desabilitar && "disabled"}
   x.innerHTML = `
-        <button type="button" class="btn btn-primary showBtn"  id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary showBtn" ${desabilitar && "disabled"} id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${(((nextRound*2)-1)+'')}> ${games[pos1].winner ===undefined ? "Pending":games[pos1].winner} </p>
         <p>vs</p>
         <p id=P${((nextRound*2)+'')}> ${games[pos2].winner===undefined ? "Pending":games[pos2].winner}  </p>
@@ -309,7 +318,6 @@ else {
         campeon.innerHTML = `<h3> </h3>`
         // aqui puedo actualizar el resultado del juego anterior
         score=document.querySelector(".item"+((id)+''));
-        //score.innerHTML += `<p>${score1+' '+score2+' '+score3+' '+score4+' '+score5+' '+score6 }</p>`
         score.innerHTML = `
         <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${((id*2)-1+'')}> ${games[id-1].nameP1} </p>
@@ -331,9 +339,10 @@ function generaBotones(){
         appDiv.innerHTML += `<div class="item${item.id}"> <p id=P${(i+'')}>  ${""}</p> </div>` // tenia pending
       }
       else {
+        // se incluyo ternario para poner disabled los matches de las siguientes rondas pudo usar operadores AND y solo cuando sea verdaddera la condicion poner el disabled
         appDiv.innerHTML += `
             <div class="item${item.id}">
-              <button type="button" class="btn btn-primary showBtn" id="${item.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <button type="button" class="btn btn-primary showBtn" id="${item.id}" ${parseInt(item.id) > 8 ? "disabled":"enabled"} data-bs-toggle="modal" data-bs-target="#exampleModal">
               <p id=P${(i+'')}> ${item.nameP1} </p>
               <p>vs</p>
               <p id=P${((i+1)+'')}> ${item.nameP2} </p>
