@@ -172,8 +172,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '9',
-        nameP1: 'Raul Ramirez',
-        nameP2: 'Jimmy Connors',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -185,8 +185,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '10',
-        nameP1: 'Ivan Lendl',
-        nameP2: 'Ile Nastase',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -198,8 +198,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '11',
-        nameP1: 'Manuel Orantes',
-        nameP2: 'John Mcnroee',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -211,8 +211,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '12',
-        nameP1: 'Mats Wilander',
-        nameP2: 'Eduardo Velez',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -224,8 +224,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '13',
-        nameP1: 'Raul Ramirez',
-        nameP2: 'Ile Nastase',
+        nameP1:'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -237,8 +237,8 @@ function getGamesFromStoorage() {
     },
     {
         id: '14',
-        nameP1: 'Manuel Orantes',
-        nameP2: 'Eduardo Velez',
+        nameP1: 'Pending',
+        nameP2: 'Pending',
         winner: '',
         score1: '0',
         score2: '0',
@@ -412,7 +412,6 @@ if(id+''=='15'){
   campeon=document.querySelector(".item"+(16+''));     // si quiso
   campeon.innerHTML = `  <h3> Campeon    ${actualGame.winner}`
   final=document.querySelector(".item"+(15+''));    
-  // validar no haya algun player pending poner alerta con Toastify si uno de los 2 es undefined or pending
   final.innerHTML = `
         <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${((id*2)-1+'')}> ${games[id-1].nameP1} </p>
@@ -420,6 +419,7 @@ if(id+''=='15'){
         <p id=P${(id*2+'')}> ${games[id-1].nameP2} </p>
         <p>score</p>
         <p> ${games[id-1].score1+ '-'+games[id-1].score2+'  '+games[id-1].score3+ '-'+games[id-1].score4+'  '+games[id-1].score5+ '-'+games[id-1].score6} </p>
+        <h3> Campeon    ${actualGame.winner} </h3>
         </button>
         `
 }
@@ -441,22 +441,25 @@ else {
     games[pos2].desabilitado = true
     desabilitar = true
   }
-  if(games[id-1].nameP1=='' || games[id-1].nameP2==''){
-    
+  // no funciona
+  if(nextGame[nextRound]=='' || nextGame[nextRound].nameP2==''){
+    desabilitar = true
   }
-  
-  // no iba a terminar sin usar esto  ${desabilitar && "disabled"}
+  else{
+    desabilitar = false
+  }
+  // fin de no funciona
   x.innerHTML = `
-        <button type="button" class="btn btn-primary showBtn" "disabled" id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary showBtn" ${desabilitar ? "disabled" : "enabled"} id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <p id=P${(((nextRound*2)-1)+'')}> ${games[pos1].winner ===undefined ? "Pending":games[pos1].winner} </p>
         <p>vs</p>
         <p id=P${((nextRound*2)+'')}> ${games[pos2].winner===undefined ? "Pending":games[pos2].winner}  </p>
         <p> score </p>
         </button>
         `
+        // actualGame  ojo con $ nextRound
         campeon=document.querySelector(".item"+(16+''));
         campeon.innerHTML = `<h3> </h3>`
-        // aqui puedo actualizar el resultado del juego anterior
         score=document.querySelector(".item"+((id)+''));
         score.innerHTML = `
         <button type="button" class="btn btn-primary showBtn" disabled id="${nextRound+''}" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -468,8 +471,8 @@ else {
         </button>
         `
 }
+  updateStorage(nextGame,nextRound,id-1,desabilitar)
   
- updateStorage(nextGame,nextRound,id-1)
 })
 
 function generaBotones(){
@@ -600,9 +603,11 @@ function generaListeners(){
 function updateStorageTemporal(a,b){
   games[b] = a // actualizar player en siguientematch 
 }
-function updateStorage(a,b){
+function updateStorage(a,b,d){
     games[b-1] = a[b]
-    games[b-1].desabilitado =false
+   // games[b-1].desabilitado =false
+    desabilita = d
+    games[b-1].desabilitado = (games[b-1].nameP1.length <1 || games[b-1].nameP2 <1  ? true : false)
     games[b-1].winner = a[b].winner
     games[b-1].score1 = a[b].score1='0'
     games[b-1].score2 = a[b].score2='0'
@@ -610,11 +615,9 @@ function updateStorage(a,b){
     games[b-1].score4 = a[b].score4='0'
     games[b-1].score5 = a[b].score5='0'
     games[b-1].score6 = a[b].score6='0'
-    console.log("---- en storage ---------")
     localStorage.setItem('gamesFirstRound',JSON.stringify(games)) 
     items = JSON.parse(localStorage.getItem('gamesFirstRound')) //solo quite const y jalo sera la inmutabilidad ?
     // games = items //ojo
-    console.log("---- en storage ---------")
    generaListeners()
   
   }
