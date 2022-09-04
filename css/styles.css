@@ -45,14 +45,14 @@ body{
    grid-column: 1/4;
    grid-row: 1/2;
    width: 140px;
-   height: 150px;
+   height: 150px
   }
   .item2{
    /*background-color: rgb(0, 162, 255);*/
    grid-column: 1/4;
    grid-row: 3/4;
    width: 140px;
-   height: 150px;
+   height: 150px
   }
   .item3{
    grid-column: 1/4;

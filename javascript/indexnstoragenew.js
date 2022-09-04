@@ -1,5 +1,5 @@
 // cargar api pata clima
-// api clima Your API key is 65a23d022f59b3e4ba06e87387a95f1a
+// api clima API key is 65a23d022f59b3e4ba06e87387a95f1a
 window.addEventListener('load', ()=> {
   let lon
   let lat
@@ -33,6 +33,7 @@ window.addEventListener('load', ()=> {
 }
 
 )
+// se determina si se empieza un draw nuevo pulsando <OK> o se continua el vgente <CANCEL>
 let reinicio = confirm("Iniciar un nuevo Draw (OK)  continuo Draw Actual (Cancel)");
 
 // a partir de la posicion 1 el contenido es el proximo juego para los games de la seguientes ronda 
@@ -94,7 +95,7 @@ function getGamesFromStoorage() {
     },
     {
         id: '3',
-        nameP1: 'Gillermo Vilas',
+        nameP1: 'GUillermo Vilas',
         nameP2: 'Ivan Lendl',
         winner: '',
         score1: '0',
@@ -278,7 +279,7 @@ if (reinicio){
   items =getGamesFromStoorage() // esto pone en ceros los scores
 }
 else{
-  items = JSON.parse(localStorage.getItem('gamesFirstRound')) //ojo sirve?
+  items = JSON.parse(localStorage.getItem('gamesFirstRound')) 
 }
 // se obtiene el proximo match del ganador del arreglo de reglas cada posicion indica cual es el proximo juego del winner
 function buscarNextRound(g,w) {
